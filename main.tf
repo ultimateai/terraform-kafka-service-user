@@ -1,18 +1,25 @@
-module "project-factory" {
-  source  = "terraform-google-modules/project-factory/google"
-  version = "~> 10.1"
+resource "aiven_kafka_user" "user" {
+  service_name = var.aiven_kafka_service_name
+  project      = var.aiven_project_name
+  username     = var.aiven_kafka_username
+}
 
-  name                 = "pf-test-1"
-  random_project_id    = true
-  org_id               = "1234567890"
-  usage_bucket_name    = "pf-test-1-usage-report-bucket"
-  usage_bucket_prefix  = "pf/test/1/integration"
-  billing_account      = "ABCDEF-ABCDEF-ABCDEF"
-  svpc_host_project_id = "shared_vpc_host_name"
+resource "vault_kv_secret_v2" "secret" {
+  mount               = var.vault_mount
+  name                = "${var.vault_path}/kafka"
+  delete_all_versions = false
+  disable_read        = true
 
-  shared_vpc_subnets = [
-    "projects/base-project-196723/regions/us-east1/subnetworks/default",
-    "projects/base-project-196723/regions/us-central1/subnetworks/default",
-    "projects/base-project-196723/regions/us-central1/subnetworks/subnet-1",
-  ]
+  data_json = jsonencode(
+    {
+      KAFKA_SSL_ACCESS_KEY  = "${aiven_kafka_user.user.access_key}"
+      KAFKA_SSL_ACCESS_CERT = "${aiven_kafka_user.user.access_cert}"
+    }
+  )
+
+  lifecycle {
+    ignore_changes = [
+      data_json
+    ]
+  }
 }

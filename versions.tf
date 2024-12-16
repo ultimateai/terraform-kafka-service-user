@@ -1,23 +1,12 @@
 terraform {
-  required_version = ">= 0.15.5, <= 1.0.0"
+  required_version = ">=1.3.0"
 
   required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "~> 3.30"
+    vault = {
+      source = "hashicorp/vault"
     }
-    null = {
-      source  = "hashicorp/null"
-      version = "~> 2.1"
-    }
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 2.2"
+    aiven = {
+      source = "aiven/aiven"
     }
   }
-}
-
-provider "google-beta" {
-  project = var.project_id
-  region  = var.region
 }
