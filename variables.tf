@@ -1,11 +1,24 @@
-variable "example" {
-  description = "Example variable"
+variable "vault_mount" {
+  description = "Vault's path mount"
   type        = string
-  default     = "hello world"
 }
 
-variable "ultimate_answer" {
-  description = "Ultimate Answer to Life, The Universe, and Everything"
-  type        = number
-  default     = 42
+variable "vault_path" {
+  description = "Vault's secret path"
+  type        = string
+}
+
+variable "aiven_project_name" {
+  description = "Aiven project name"
+  type        = string
+}
+
+variable "aiven_kafka_service_name" {
+  description = "Aiven kafka service name"
+  type        = string
+}
+
+variable "aiven_kafka_username" {
+  description = "Aiven kafka username"
+  type        = string
 }
